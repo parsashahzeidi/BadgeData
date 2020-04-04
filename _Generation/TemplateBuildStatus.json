@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "label": "BUILD STATUS",
+  "message": "%s",
+  "color": "%s",
+  "style": "for-the-badge"
+}
+

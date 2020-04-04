@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "label": "TEST STATUS",
+  "message": "Failing",
+  "color": "ff4443",
+  "style": "for-the-badge"
+}
