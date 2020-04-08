@@ -27,26 +27,26 @@ result=$?
 # Compile Succeeded.
 if [ ${result} == "0" ]
 then
-    builds=1
+	builds=1
 
-    # Calculating the test results
-    ./Run -i=../../Tests/Tests.lfi >/dev/null 2>&1
-    result=$?
+	# Calculating the test results
+	./Run -i=../../Tests/Tests.lfi >/dev/null 2>&1
+	result=$?
 
-    # Tests succeeded.
-    if [ ${result} == 0 ]
-    then
-        tests=1
+	# Tests succeeded.
+	if [ ${result} == 0 ]
+	then
+		tests=1
 
-    # Tests failed.
-    else
+	# Tests failed.
+	else
 		tests=0
-    fi
+	fi
 
 # Compile Failed.
 else
-    builds=0
-    tests=nan
+	builds=0
+	tests=nan
 fi
 
 # Calculating the Commit ID
@@ -79,8 +79,8 @@ then
 	cache_message="Passing"
 
 else
-    cache_colour=${error_colour}
-    cache_message="Failing"
+	cache_colour=${error_colour}
+	cache_message="Failing"
 
 fi
 
@@ -90,12 +90,12 @@ template_build_status=`printf "${template_build_status}" "${cache_message}" "${c
 # Building the test status template
 if [ ${tests} == 1 ]
 then
-    cache_colour=${success_colour}
-    cache_message="Passing"
+	cache_colour=${success_colour}
+	cache_message="Passing"
 
 else
-    cache_colour=${error_colour}
-    cache_message="Failing"
+	cache_colour=${error_colour}
+	cache_message="Failing"
 
 fi
 
