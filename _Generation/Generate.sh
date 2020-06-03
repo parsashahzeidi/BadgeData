@@ -111,3 +111,8 @@ echo "${template_build_status}" >../BuildStatus.json
 echo "${template_test_status}" >../TestStatus.json
 echo "${template_commit_hash}" >../CommitHash.json
 rm -rf ./alton
+
+# Commiting
+cd ..
+git commit -a -m "Anotha one!" >/dev/null
+git push
