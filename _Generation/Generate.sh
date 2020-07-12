@@ -7,7 +7,7 @@ cd "${DIR}"
 export error_colour=ff4443
 export success_colour=81df7c
 
-./clone
+./Clone.sh
 ./Hash.sh
 ./Compile.sh
 clean
