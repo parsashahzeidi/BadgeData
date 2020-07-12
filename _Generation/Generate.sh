@@ -12,12 +12,10 @@ export neutral_colour=67add8
 ./Clone.sh & p2=$!
 
 wait ${p1} || exit
-wait ${p2} || exit
 
 ./Hash.sh & p1=$!
 ./Compile.sh & p2=$!
 
-wait ${p1} || exit
-wait ${p2} || exit
+wait || exit
 
 ./Commit.sh
