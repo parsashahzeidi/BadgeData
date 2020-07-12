@@ -4,60 +4,89 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "${DIR}"
 
 # Cloning Alton
-git clone https://www.github.com/parsashahzeidi/Alton alton >/dev/null 2>&1
+function clone {
+	git clone https://www.github.com/parsashahzeidi/Alton alton\
+			>/dev/null 2>&1
 
-if [ $? != 0 ]
-then
-	echo cloning failed.
-	exit
-fi
-
-# Compressing
-tar -c ./alton -O > ./temp.tar
-
-# Backing up
-# TODO: <
-
-cd ./alton
-
-# Calculating the Compile results
-cmake . -G Ninja >/dev/null && ninja >/dev/null
-result=$?
-
-# Compile Succeeded.
-if [ ${result} == "0" ]
-then
-	builds=1
-
-	# Calculating the test results
-	./Run -i=../../Tests/Tests.lfi >/dev/null 2>&1
-	result=$?
-
-	# Tests succeeded.
-	if [ ${result} == 0 ]
+	if [ $? != 0 ]
 	then
-		tests=1
+		echo -en -- "\033[1mCloning failed.\033[0m"
+		exit
+	fi
+	return $?
+}
 
-	# Tests failed.
-	else
-		tests=0
+# Compressing a tarfile, then hashing it
+# NOTE: The folder ./alton is copied so that there won't be any race
+#	collisions with the "compile" function
+function hash {
+	cp -r ./alton ./compresstemp
+	
+	tar -c ./compresstemp -O\
+			>./compressed.tar
+	
+	compress_result=$?
+	
+	if [ compress_result != 0 ]
+	then
+		echo -en -- "\033[1mCompressing failed.\033[0m\n"
 	fi
 
-# Compile Failed.
-else
-	builds=0
-	tests=nan
-fi
+	# Calculating the Commit ID
+	cd ../
+	hashed=`sha512sum ./temp.tar`
+	
+	# Clearing excess output in hashed
+	read -ra hashed_split <<<$hashed
+	hashed=${hashed_split[0]:0:16}
 
-# Calculating the Commit ID
-cd ../
-hashed=`sha512sum ./temp.tar`
-rm ./temp.tar
-rm -rf ./alton
+	echo -en -- "\033[1mHashing succeeded.\033[0m\n"
+}
 
-# Clearing excess output in hashed
-read -ra hashed_split <<<$hashed
-hashed=${hashed_split[0]:0:16}
+# Calculating the Compile results
+# NOTE: The folder ./alton is copied so that there won't be any race
+#	collisions with the "hash" function
+function compile {
+	cp -r ./alton ./compiletemp
+	cd compiletemp
+
+	cmake . -Wno-dev -G Ninja >/dev/null && ninja >/dev/null
+	result=$?
+	
+	# Compile Succeeded.
+	if [ ${result} == "0" ]
+	then
+		builds=1
+
+		# Calculating the test results
+		./Run -i=../../Tests/Tests.lfi >/dev/null 2>&1
+		result=$?
+
+		# Tests succeeded.
+		if [ ${result} == 0 ]
+		then
+			tests=1
+
+		# Tests failed.
+		else
+			tests=0
+		fi
+
+	# Compile Failed.
+	else
+		builds=0
+		tests=nan
+	fi
+}
+
+# Cleans rubbish
+function clean {
+	rm -fr ./compressed.tar ./compiletemp ./compresstemp ./alton
+}
+
+clone
+compress & compile
+clean
 
 # Them Templates
 template_build_status=`<./TemplateBuildStatus.json`
@@ -110,11 +139,10 @@ template_commit_hash=`printf "${template_commit_hash}" "${hashed}"`
 echo "${template_build_status}" >../BuildStatus.json
 echo "${template_test_status}" >../TestStatus.json
 echo "${template_commit_hash}" >../CommitHash.json
-rm -rf ./alton
 
 # Commiting
 cd ..
-git commit -a -m "Anotha one!" >/dev/null
+git commit -a -m "AutoCommiter v2.0.0" >/dev/null
 git push
 
 cd _Generation
