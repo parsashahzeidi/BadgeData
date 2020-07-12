@@ -8,21 +8,16 @@ export error_colour=ff4443
 export success_colour=81df7c
 export neutral_colour=67add8
 
-./PrintHeader.sh &
-./Clone.sh
-./Hash.sh
-./Compile.sh
+./PrintHeader.sh & p1=$!
+./Clone.sh & p2=$!
 
-# Them Templates
-template_test_status=`<./TemplateTestStatus.json`
+wait ${p1} || exit
+wait ${p2} || exit
 
-# Them Caches
-cache_colour=""
-cache_message=""
+./Hash.sh & p1=$!
+./Compile.sh & p2=$!
 
+wait ${p1} || exit
+wait ${p2} || exit
 
-# Commiting
-git commit -a -m "AutoCommiter v2.0.0" >/dev/null
-git push
-
-cd _Generation
+./Commit.sh
