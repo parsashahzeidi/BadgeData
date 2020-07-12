@@ -20,7 +20,6 @@ template_test_status=`<./TemplateTestStatus.json`
 cache_colour=""
 cache_message=""
 
-echo "${template_commit_hash}" >../CommitHash.json
 
 # Commiting
 git commit -a -m "AutoCommiter v2.0.0" >/dev/null
