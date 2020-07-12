@@ -8,7 +8,7 @@ export error_colour=ff4443
 export success_colour=81df7c
 export neutral_colour=67add8
 
-./PrintHeader.sh
+./PrintHeader.sh &
 ./Clone.sh
 ./Hash.sh
 ./Compile.sh
