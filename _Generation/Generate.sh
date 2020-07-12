@@ -6,7 +6,9 @@ cd "${DIR}"
 # Them colours
 export error_colour=ff4443
 export success_colour=81df7c
+export neutral_colour=67add8
 
+./PrintHeader.sh
 ./Clone.sh
 ./Hash.sh
 ./Compile.sh
@@ -33,25 +35,6 @@ fi
 
 # Writin'
 template_build_status=`printf "${template_build_status}" "${cache_message}" "${cache_colour}"`
-
-# Building the test status template
-if [ ${tests} == 1 ]
-then
-	cache_colour=${success_colour}
-	cache_message="Passing"
-
-else
-	cache_colour=${error_colour}
-	cache_message="Failing"
-
-fi
-
-# Writin'
-template_test_status=`printf "${template_test_status}" "${cache_message}" "${cache_colour}"`
-
-# Building the commit hash templates
-# Writin'
-template_commit_hash=`printf "${template_commit_hash}" "${hashed}"`
 
 # Writin' to the hard drive
 echo "${template_build_status}" >../BuildStatus.json

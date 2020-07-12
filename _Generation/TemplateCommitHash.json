@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "label": "COMMIT HASH",
   "message": "%s",
-  "color": "67add8",
+  "color": "%s",
   "style": "for-the-badge"
 }
-
