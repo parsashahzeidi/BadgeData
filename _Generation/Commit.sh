@@ -8,4 +8,4 @@ git commit -a -m "AutoCommiter!" >/dev/null
 
 # --- Pushing ---
 git push
-while [ $? ]; git push; end
+while [ $? ]; do git push; done
